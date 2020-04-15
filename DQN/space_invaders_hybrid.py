@@ -216,25 +216,24 @@ if __name__ == '__main__':
             agent.learn(batch_size)
             lastAction = action
         
-        if i%10==0:
-            T.save({
-                'game': i,
-                'Q_eval': agent.Q_eval.state_dict(),
-                'Q_next': agent.Q_next.state_dict(),
-                'optimizer_eval': agent.Q_eval.optimizer.state_dict(),
-                'optimizer_next': agent.Q_next.optimizer.state_dict(),
-                'eps_end': agent.eps_end,
-                'steps' : agent.steps,
-                'learn_step_counter' : agent.learn_step_counter,
-                'memory': agent.memory,
-                'stacked_frames': agent.stacked_frames,
-                'memCounter': agent.memCounter,
-                'replace_target_counter': agent.replace_target_counter,
-            }, "model_parameters.pt")
-
         scores.append(score)
         print('score:',score)
-
+        
+        
+    T.save({
+        'game': i,
+        'Q_eval': agent.Q_eval.state_dict(),
+        'Q_next': agent.Q_next.state_dict(),
+        'optimizer_eval': agent.Q_eval.optimizer.state_dict(),
+        'optimizer_next': agent.Q_next.optimizer.state_dict(),
+        'eps_end': agent.eps_end,
+        'steps' : agent.steps,
+        'learn_step_counter' : agent.learn_step_counter,
+        'memory': agent.memory,
+        'stacked_frames': agent.stacked_frames,
+        'memCounter': agent.memCounter,
+        'replace_target_counter': agent.replace_target_counter,
+    }, "model_parameters.pt")
     
     x = [i+1 for i in range(numGames)]
     fileName = str(numGames) + 'Games' + 'Gamma' + str(agent.GAMMA) + 'Alpha' + str(agent.ALPHA) + 'Memory' + str(agent.memSize)+ '.png'
