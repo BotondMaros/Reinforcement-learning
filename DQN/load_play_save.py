@@ -55,6 +55,7 @@ if __name__ == "__main__":
         lastAction = 0 
         
         while not done:
+            state = agent.stackedState(observation)
             if state_skipping == 3:                
                 action = agent.chooseAction(state)
                 state_skipping = 0
