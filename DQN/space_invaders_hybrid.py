@@ -198,6 +198,7 @@ if __name__ == '__main__':
         lastAction = 0 
         
         while not done:
+            state = agent.stackedState(observation)
             if state_skipping == 3:                
                 action = agent.chooseAction(state)
                 state_skipping = 0
@@ -211,14 +212,15 @@ if __name__ == '__main__':
             
             if done and info['ale.lives'] == 0:
                 reward = -100
+            
             agent.storeTransition(state, action, reward, state_)
             observation = observation_
             agent.learn(batch_size)
             lastAction = action
-        
+
+
         scores.append(score)
         print('score:',score)
-        
         
     T.save({
         'game': i,
@@ -234,7 +236,8 @@ if __name__ == '__main__':
         'memCounter': agent.memCounter,
         'replace_target_counter': agent.replace_target_counter,
     }, "model_parameters.pt")
-    
+
+
     x = [i+1 for i in range(numGames)]
     fileName = str(numGames) + 'Games' + 'Gamma' + str(agent.GAMMA) + 'Alpha' + str(agent.ALPHA) + 'Memory' + str(agent.memSize)+ '.png'
     plotLearning(x, scores, epsHistory, fileName)
