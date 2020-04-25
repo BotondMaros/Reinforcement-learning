@@ -7,42 +7,44 @@ import random
 import matplotlib as plt
 import sys
 import gym
-
-from space_invaders_hybrid import Agent, DeepQNetwork
+from gym.wrappers import Monitor
+from space_invaders_3Dtensor_boti import Agent, DeepQNetwork
 
 
 ALPHA = 0.03
 GAMMA = 0.99
-EPSILON = 1.0
+EPSILON =0.05
 MAXMEMSIZE = 2000
 REPLACE = 10000
 
 
 if __name__ == "__main__":
     env = gym.make('SpaceInvaders-v0')
+    env = Monitor(env, './video')
     agent = Agent(gamma=GAMMA, epsilon=EPSILON, alpha=ALPHA, maxMemSize=MAXMEMSIZE, replace=REPLACE)
 
     #load model from "model_parameters.pt" and assigning values to variables
-    checkpoint = torch.load("model_parameters.pt")
+    checkpoint = T.load("model_parameters.pt", map_location=lambda storage, loc: storage)
     agent.Q_eval.load_state_dict(checkpoint["Q_eval"])
     agent.Q_next.load_state_dict(checkpoint["Q_next"])
     agent.Q_eval.optimizer.load_state_dict(checkpoint["optimizer_eval"])
     agent.Q_next.optimizer.load_state_dict(checkpoint["optimizer_next"])
-    agent.eps_end = checkpoint(['eps_end'])
-    agent.steps = checkpoint(['steps'])
-    agent.learn_step_counter = checkpoint(['learn_step_counter'])
-    agent.memory = checkpoint(['memory'])
-    agent.stacked_frames = checkpoint(['stacked_frames'])
-    agent.memCounter = checkpoint(['memCounter'])
-    agent.replace_target_counter = checkpoint(['replace_target_counter'])
-    games = checkpoint(['game'])
+    print("loading completed")
+    #agent.eps_end = checkpoint(['eps_end'])
+    #agent.steps = checkpoint(['steps'])
+    #agent.learn_step_counter = checkpoint(['learn_step_counter'])
+    #agent.memory = checkpoint(['memory'])
+    #agent.stacked_frames = checkpoint(['stacked_frames'])
+    #agent.memCounter = checkpoint(['memCounter'])
+    #agent.replace_target_counter = checkpoint(['replace_target_counter'])
+    #games = checkpoint(['game'])
 
     #play 50 games
     scores = []
     epsHistory = [] 
-    numGames = games + 50
+    numGames = 50
     
-    for i in range(numGames):
+    for i in range(1,numGames):
         print('starting game ', i+1, 'epsilon: %.4f' % agent.EPSILON)
         epsHistory.append(agent.EPSILON)
         done = False
@@ -61,16 +63,17 @@ if __name__ == "__main__":
             else:
                 action = lastAction
                 state_skipping += 1
-            
+            env.render()
             observation_, reward, done, info = env.step(action)
             score += reward
             state_ = agent.stackedState(observation_)
             
             if done and info['ale.lives'] == 0:
-                reward = -100
+                reward = -1
 
             observation = observation_
             lastAction = action
         
         scores.append(score)
         print('score:',score)
+    env.close()
