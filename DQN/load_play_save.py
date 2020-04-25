@@ -28,22 +28,23 @@ if __name__ == "__main__":
     agent.Q_next.load_state_dict(checkpoint["Q_next"])
     agent.Q_eval.optimizer.load_state_dict(checkpoint["optimizer_eval"])
     agent.Q_next.optimizer.load_state_dict(checkpoint["optimizer_next"])
-    agent.eps_end = checkpoint(['eps_end'])
-    agent.steps = checkpoint(['steps'])
-    agent.learn_step_counter = checkpoint(['learn_step_counter'])
-    agent.memory = checkpoint(['memory'])
-    agent.stacked_frames = checkpoint(['stacked_frames'])
-    agent.memCounter = checkpoint(['memCounter'])
-    agent.replace_target_counter = checkpoint(['replace_target_counter'])
-    games = checkpoint(['game'])
+    #agent.eps_end = checkpoint(['eps_end'])
+    #agent.steps = checkpoint(['steps'])
+    #agent.learn_step_counter = checkpoint(['learn_step_counter'])
+    #agent.memory = checkpoint(['memory'])
+    #agent.stacked_frames = checkpoint(['stacked_frames'])
+    #agent.memCounter = checkpoint(['memCounter'])
+    #agent.replace_target_counter = checkpoint(['replace_target_counter'])
+    #games = checkpoint(['game'])
+    print("loading completed")
 
     #train 50 more games
     scores = []
     epsHistory = [] 
-    numGames = games + 50
+    numGames = 50
     batch_size = 32 
 
-    for i in range(numGames):
+    for i in range(1,numGames):
         print('starting game ', i+1, 'epsilon: %.4f' % agent.EPSILON)
         epsHistory.append(agent.EPSILON)
         done = False
@@ -79,16 +80,17 @@ if __name__ == "__main__":
 
     FILENAME = "model_parameters.pt"
     T.save({
-        'game': i,
         'Q_eval': agent.Q_eval.state_dict(),
         'Q_next': agent.Q_next.state_dict(),
         'optimizer_eval': agent.Q_eval.optimizer.state_dict(),
-        'optimizer_next': agent.Q_next.optimizer.state_dict(),
-        'eps_end': agent.eps_end,
-        'steps' : agent.steps,
-        'learn_step_counter' : agent.learn_step_counter,
-        'memory': agent.memory,
-        'stacked_frames': agent.stacked_frames,
-        'memCounter': agent.memCounter,
-        'replace_target_counter': agent.replace_target_counter,
+        'optimizer_next': agent.Q_next.optimizer.state_dict()
     }, FILENAME)
+    print("saving completed")
+
+    # eps_end': agent.eps_end,
+    #     'steps' : agent.steps,
+    #     'learn_step_counter' : agent.learn_step_counter,
+    #     'memory': agent.memory,
+    #     'stacked_frames': agent.stacked_frames,
+    #     'memCounter': agent.memCounter,
+    #     'replace_target_counter': agent.replace_target_counter,
