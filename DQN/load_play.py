@@ -44,7 +44,7 @@ if __name__ == "__main__":
     epsHistory = [] 
     numGames = 50
     
-    for i in range(1,numGames):
+    for i in range(numGames):
         print('starting game ', i+1, 'epsilon: %.4f' % agent.EPSILON)
         epsHistory.append(agent.EPSILON)
         done = False
