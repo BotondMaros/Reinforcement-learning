@@ -8,7 +8,7 @@ import matplotlib as plt
 import sys
 import gym
 from gym.wrappers import Monitor
-from space_invaders_3Dtensor_boti import Agent, DeepQNetwork
+from space_invaders_hybrid import Agent, DeepQNetwork
 
 
 ALPHA = 0.03
